@@ -22,7 +22,7 @@ public class FindTheExit {
         this.x2 = x2;
         this.y1 = y1;
         this.y2 = y2;
-        this.matrix = new MatrixElements[(matrix.length * 2 + 1) * 2 + 1][(matrix[0].length * 2 + 1) * 2 + 1];
+        this.matrix = matrix;
     }
 
     /**
@@ -42,11 +42,10 @@ public class FindTheExit {
                 int randN = (int) (Math.random() * listNeighbours.size());  //Рандомно выбираем куда пойдем
                 neighbourCell = listNeighbours.get(randN);  //List возращает случчайно выбранного соседа
                 stack.push(currentCell);    //Помещаем ячейку, где возник выбор пути
-                //removePoint(currentCell, neighbourCell);    //Смена позиции
                 currentCell = neighbourCell;    //Произошло перемещение ячейки
-                matrix[currentCell.getX()][currentCell.getY()] = MatrixElements.VISI;   //Помечаем как посещенную
-            } else if (!stack.empty()) {//Если стек НЕ пуст
-                matrix[currentCell.getX()][currentCell.getY()] = MatrixElements.BADROAD;
+                matrix[currentCell.getX()][currentCell.getY()] = MatrixElements.VISI;//Помечаем как посещенную
+            } else if (!stack.empty()) {    //Если стек НЕ пуст
+                matrix[currentCell.getX()][currentCell.getY()] = MatrixElements.BADROAD;    //Отмечаем ячейку ведущию в тупик
                 currentCell = stack.pop();  //Достаем ячейку, на которой мы делали выбор
             } else {
                 //Если нет соседей и точек в стеке, но не все точки посещены
@@ -55,7 +54,6 @@ public class FindTheExit {
                 break;
             }
         } while (!isExit(currentCell));
-
     }
 
     /**
@@ -70,9 +68,8 @@ public class FindTheExit {
         }
         return false;*/
         if (cell.getX() == matrix.length - 2 && cell.getY() == matrix[0].length - 2) {
-            return cell.getX() == matrix.length - 2 && cell.getY() == matrix[0].length - 2;
-        }
-        return false;
+            return cell.getX() == matrix.length - 2 && cell.getY() == matrix[0].length - 2;}
+        return cell.getX() == matrix.length - 2 && cell.getY() == matrix[0].length - 2;
     }
 
     /**
@@ -83,9 +80,9 @@ public class FindTheExit {
      * @param c
      * @return
      */
-//TODO: ЧЕТКО
+//TODO: Есть подозрение, что логика храмает
     private List<Cell> getNeighbours(Cell c) {
-        List<Cell> cell_list = new ArrayList<>();
+        List<Cell> cell_list = new ArrayList<>();   //Создали переменную для возврата данных
         int i = c.getX();
         int j = c.getY();
 
@@ -97,7 +94,6 @@ public class FindTheExit {
             cell_list.add(new Cell(i + 1, j));
         if (j - 1 > 0 && matrix[i][j - 1] == MatrixElements.ROAD)               //Проверка на левого соседа
             cell_list.add(new Cell(i, j - 1));
-
         return cell_list;
     }
 }
